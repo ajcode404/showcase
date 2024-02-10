@@ -7,9 +7,9 @@ import (
 
 type Post struct {
 	ID      int    `json:"id"`
-	title   string `json:"title"`
-	snippet string `json:"snippet"`
-	deleted bool   `json:deleted"`
+	Title   string `json:"title"`
+	Snippet string `json:"snippet"`
+	Deleted bool   `json:"deleted"`
 }
 
 type Posts []*Post
@@ -31,14 +31,14 @@ func (p *Posts) ToJSON(w io.Writer) error {
 var blogDummyData = Posts{
 	{
 		ID:      1,
-		title:   "The first blog",
-		snippet: "this is my first blog hope you enjoy it blah blah blah",
-		deleted: false,
+		Title:   "The first blog",
+		Snippet: "this is my first blog hope you enjoy it blah blah blah",
+		Deleted: false,
 	},
 	{
 		ID:      2,
-		title:   "The second blog",
-		snippet: "this is my second blog hope you enjoy it blah blah blah",
-		deleted: false,
+		Title:   "The second blog",
+		Snippet: "this is my second blog hope you enjoy it blah blah blah",
+		Deleted: false,
 	},
 }
