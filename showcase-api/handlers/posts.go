@@ -7,19 +7,18 @@ import (
 	"main.go/data"
 )
 
-type Posts struct {
-	l *log.Logger
-}
-
 func NewPosts(l *log.Logger) *Posts {
 	return &Posts{l}
+}
+
+type Posts struct {
+	l *log.Logger
 }
 
 func (b *Posts) GetPosts(rw http.ResponseWriter, r *http.Request) {
 	b.l.Println("Handle GET posts")
 	lp := data.GetBlogs()
-	err := lp.ToJSON(rw)
-	if err != nil {
+	if err := lp.ToJSON(rw); err != nil {
 		http.Error(rw, "Unable to marshal json", http.StatusInternalServerError)
 	}
 }
