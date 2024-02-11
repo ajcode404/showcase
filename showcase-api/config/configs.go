@@ -41,11 +41,16 @@ func (c *Config) getPath() string {
 
 func getEnv() string {
 	args := os.Args
+	defaultEnv := "prod"
 	var env string
-	if len(args) < 2 {
-		env = "prod"
-	} else {
+	if len(args) >= 2 {
 		env = args[1]
+		switch env {
+		case "dev":
+		case "prod":
+		case "sandbox":
+			return env
+		}
 	}
-	return env
+	return defaultEnv
 }
