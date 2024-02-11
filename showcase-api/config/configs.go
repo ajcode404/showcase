@@ -34,7 +34,18 @@ func (c *Config) Port() string {
 }
 
 func (c *Config) getPath() string {
-	args := os.Args
-	path := fmt.Sprintf("envs/%s.yaml", args[1])
+	env := getEnv()
+	path := fmt.Sprintf("envs/%s.yaml", env)
 	return path
+}
+
+func getEnv() string {
+	args := os.Args
+	var env string
+	if len(args) < 2 {
+		env = "prod"
+	} else {
+		env = args[1]
+	}
+	return env
 }
