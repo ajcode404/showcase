@@ -47,7 +47,9 @@ func getEnv() string {
 		env = args[1]
 		switch env {
 		case "dev":
+			return env
 		case "prod":
+			return env
 		case "sandbox":
 			return env
 		}
