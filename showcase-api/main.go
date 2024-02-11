@@ -9,13 +9,17 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"main.go/config"
 	"main.go/handlers"
 )
 
 func main() {
 
 	l := log.New(os.Stdout, "[showcase-api] ", log.Flags())
-	const port = "8080"
+
+	config := config.NewConfig(l)
+
+	port := config.Port()
 
 	postsHandler := handlers.NewPosts(l)
 
