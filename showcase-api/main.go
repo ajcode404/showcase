@@ -9,13 +9,15 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"main.go/config"
 	"main.go/handlers"
 )
 
 func main() {
 
 	l := log.New(os.Stdout, "[showcase-api] ", log.Flags())
-	const port = "8080"
+
+	config := config.NewConfig(l)
 
 	postsHandler := handlers.NewPosts(l)
 
@@ -25,7 +27,7 @@ func main() {
 	getRouter.HandleFunc("/", postsHandler.GetPosts)
 
 	s := http.Server{
-		Addr:         ":" + port,
+		Addr:         config.Host() + ":" + config.Port(),
 		Handler:      sm,
 		ErrorLog:     l,
 		ReadTimeout:  1 * time.Second,
@@ -33,7 +35,7 @@ func main() {
 		IdleTimeout:  120 * time.Second,
 	}
 	go func() {
-		l.Printf("starting server on port %s", port)
+		l.Printf("starting server on host=%s and port=%s", config.Host(), config.Port())
 		err := s.ListenAndServe()
 		if err != nil {
 			l.Fatal(err)
@@ -42,7 +44,6 @@ func main() {
 
 	sigChannel := make(chan os.Signal, 1)
 	signal.Notify(sigChannel, os.Interrupt)
-	signal.Notify(sigChannel, os.Kill)
 
 	sig := <-sigChannel
 	l.Println("Recieved terminate, graceful shutdoen", sig)

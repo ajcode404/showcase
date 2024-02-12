@@ -1,0 +1,3 @@
+server-config:
+  host: 'https://example.com'
+  port: 81
