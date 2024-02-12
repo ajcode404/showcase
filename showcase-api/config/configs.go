@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -9,15 +8,8 @@ import (
 )
 
 type IConfig struct {
+	l        *log.Logger
 	s_Config *Config
-}
-
-type Config struct {
-	SConfig *ServerConfig `yaml:"server-config"`
-}
-
-type ServerConfig struct {
-	Port string `yaml:"port"`
 }
 
 func NewConfig(l *log.Logger) *IConfig {
@@ -29,37 +21,16 @@ func NewConfig(l *log.Logger) *IConfig {
 	if err = yaml.Unmarshal(yamlFile, config); err != nil {
 		panic("config un-marshal failed")
 	}
-	return &IConfig{config}
+	return &IConfig{l, config}
 }
 
+// public API's
 func (c *IConfig) Port() string {
+	c.l.Println("port is ", c.s_Config.port())
 	return c.s_Config.port()
 }
 
-func (c *Config) port() string {
-	return c.SConfig.Port
-}
-
-func (c *Config) getPath() string {
-	env := getEnv()
-	path := fmt.Sprintf("envs/%s.yaml", env)
-	return path
-}
-
-func getEnv() string {
-	args := os.Args
-	defaultEnv := "prod"
-	var env string
-	if len(args) >= 2 {
-		env = args[1]
-		switch env {
-		case "dev":
-			return env
-		case "prod":
-			return env
-		case "sandbox":
-			return env
-		}
-	}
-	return defaultEnv
+func (c *IConfig) Host() string {
+	c.l.Println("host is ", c.s_Config.host())
+	return c.s_Config.host()
 }

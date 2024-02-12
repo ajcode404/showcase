@@ -21,6 +21,8 @@ func main() {
 
 	port := config.Port()
 
+	host := config.Host()
+
 	postsHandler := handlers.NewPosts(l)
 
 	sm := mux.NewRouter()
@@ -29,7 +31,7 @@ func main() {
 	getRouter.HandleFunc("/", postsHandler.GetPosts)
 
 	s := http.Server{
-		Addr:         ":" + port,
+		Addr:         host + ":" + port,
 		Handler:      sm,
 		ErrorLog:     l,
 		ReadTimeout:  1 * time.Second,
