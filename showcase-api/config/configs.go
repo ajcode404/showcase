@@ -8,8 +8,11 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type IConfig struct {
+	s_Config *Config
+}
+
 type Config struct {
-	l       *log.Logger
 	SConfig *ServerConfig `yaml:"server-config"`
 }
 
@@ -17,8 +20,8 @@ type ServerConfig struct {
 	Port string `yaml:"port"`
 }
 
-func NewConfig(l *log.Logger) *Config {
-	config := &Config{l, &ServerConfig{}}
+func NewConfig(l *log.Logger) *IConfig {
+	config := &Config{&ServerConfig{}}
 	yamlFile, err := os.ReadFile(config.getPath())
 	if err != nil {
 		panic("file reading failed")
@@ -26,10 +29,14 @@ func NewConfig(l *log.Logger) *Config {
 	if err = yaml.Unmarshal(yamlFile, config); err != nil {
 		panic("config un-marshal failed")
 	}
-	return config
+	return &IConfig{config}
 }
 
-func (c *Config) Port() string {
+func (c *IConfig) Port() string {
+	return c.s_Config.port()
+}
+
+func (c *Config) port() string {
 	return c.SConfig.Port
 }
 
