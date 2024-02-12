@@ -26,11 +26,9 @@ func NewConfig(l *log.Logger) *IConfig {
 
 // public API's
 func (c *IConfig) Port() string {
-	c.l.Println("port is ", c.s_Config.port())
 	return c.s_Config.port()
 }
 
 func (c *IConfig) Host() string {
-	c.l.Println("host is ", c.s_Config.host())
 	return c.s_Config.host()
 }

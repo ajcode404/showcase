@@ -19,10 +19,6 @@ func main() {
 
 	config := config.NewConfig(l)
 
-	port := config.Port()
-
-	host := config.Host()
-
 	postsHandler := handlers.NewPosts(l)
 
 	sm := mux.NewRouter()
@@ -31,7 +27,7 @@ func main() {
 	getRouter.HandleFunc("/", postsHandler.GetPosts)
 
 	s := http.Server{
-		Addr:         host + ":" + port,
+		Addr:         config.Host() + ":" + config.Port(),
 		Handler:      sm,
 		ErrorLog:     l,
 		ReadTimeout:  1 * time.Second,
@@ -39,7 +35,7 @@ func main() {
 		IdleTimeout:  120 * time.Second,
 	}
 	go func() {
-		l.Printf("starting server on port %s", port)
+		l.Printf("starting server on host=%s and port=%s", config.Host(), config.Port())
 		err := s.ListenAndServe()
 		if err != nil {
 			l.Fatal(err)
@@ -48,7 +44,6 @@ func main() {
 
 	sigChannel := make(chan os.Signal, 1)
 	signal.Notify(sigChannel, os.Interrupt)
-	signal.Notify(sigChannel, os.Kill)
 
 	sig := <-sigChannel
 	l.Println("Recieved terminate, graceful shutdoen", sig)
